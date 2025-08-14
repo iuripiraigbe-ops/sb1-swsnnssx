@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: legaltok-postgres
+    environment:
+      POSTGRES_DB: legaltok
+      POSTGRES_USER: legaltok
+      POSTGRES_PASSWORD: legaltok123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - legaltok-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: legaltok-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - legaltok-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: legaltok-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@legaltok.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - legaltok-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  redis_data:
+  pgadmin_data:
+
+networks:
+  legaltok-network:
+    driver: bridge

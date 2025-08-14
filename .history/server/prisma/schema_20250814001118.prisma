@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(ALUNO)
+  bio          String?
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  professorProfile ProfessorProfile?
+  videos          Video[]
+  comments        Comment[]
+  reports         Report[]
+  followers       Follow[]     @relation("UserFollowers")
+  following       Follow[]     @relation("UserFollowing")
+  likes          Like[]
+
+  @@map("users")
+}
+
+model ProfessorProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  specialties String[] // Array de especialidades
+  verified    Boolean  @default(false)
+  links       Json     // Links de contato, cursos, etc.
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("professor_profiles")
+}
+
+model Video {
+  id          String      @id @default(cuid())
+  authorId    String
+  title       String
+  description String?
+  tags        String[]    // Tags do vídeo
+  durationSec Int
+  fileUrl     String
+  thumbUrl    String?
+  status      VideoStatus @default(UPLOADING)
+  views       Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  author   User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    Like[]
+  comments Comment[]
+  reports  Report[]
+  topics   VideoTopic[]
+
+  @@map("videos")
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@map("follows")
+}
+
+model Like {
+  userId    String
+  videoId   String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@id([userId, videoId])
+  @@map("likes")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  videoId   String
+  authorId  String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  video  Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  author User  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Report {
+  id         String    @id @default(cuid())
+  videoId    String
+  reporterId String
+  reason     String
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+
+  // Relations
+  video    Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  reporter User  @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+model Topic {
+  id    String @id @default(cuid())
+  slug  String @unique
+  title String
+
+  // Relations
+  videos VideoTopic[]
+
+  @@map("topics")
+}
+
+model VideoTopic {
+  videoId String
+  topicId String
+
+  // Relations
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([videoId, topicId])
+  @@map("video_topics")
+}
+
+enum UserRole {
+  PROFESSOR
+  ALUNO
+}
+
+enum VideoStatus {
+  UPLOADING
+  READY
+  FAILED
+}

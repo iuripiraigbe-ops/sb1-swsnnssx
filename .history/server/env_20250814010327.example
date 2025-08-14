@@ -1,0 +1,26 @@
+# Database (Neon)
+DATABASE_URL="postgresql://[user]:[password]@[host]/[database]?sslmode=require"
+
+# Redis (Upstash)
+REDIS_URL="rediss://[user]:[password]@[host]:[port]"
+
+# JWT
+JWT_SECRET="your-super-secret-jwt-key-change-in-production"
+JWT_REFRESH_SECRET="your-super-secret-refresh-key-change-in-production"
+JWT_EXPIRES_IN="15m"
+JWT_REFRESH_EXPIRES_IN="7d"
+
+# Server
+PORT=3001
+NODE_ENV="production"
+
+# File Upload
+UPLOAD_DIR="./uploads"
+MAX_FILE_SIZE=100000000 # 100MB
+
+# CORS
+CORS_ORIGIN="https://seu-frontend.vercel.app"
+
+# Rate Limiting
+RATE_LIMIT_MAX=100
+RATE_LIMIT_WINDOW_MS=900000 # 15 minutes
