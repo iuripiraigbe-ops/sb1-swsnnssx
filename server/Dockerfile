@@ -3,9 +3,14 @@ FROM node:20-bullseye AS deps
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --only=production
 
-FROM deps AS build
+FROM node:20-bullseye AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
 
 COPY . .
 RUN npm run build && npx prisma generate

@@ -1,336 +1,155 @@
-# LegalTok - TikTok Jurídico
+# LegalTok MVP
 
-Um MVP completo de plataforma de vídeos curtos para educação jurídica, inspirado no TikTok. Professores podem criar conteúdo educativo e alunos podem consumir, interagir e aprender de forma dinâmica.
+Uma plataforma de vídeos curtos para o mercado jurídico brasileiro, inspirada no TikTok.
 
-## 🚀 Funcionalidades
+## 🚀 Sobre o Projeto
 
-### Para Professores
-- ✅ Perfis verificáveis com especialidades
-- ✅ Upload de vídeos curtos (≤90s)
-- ✅ Transcodificação automática (720p + thumbnail)
-- ✅ Links de contato e calendário de vendas
-- ✅ Estatísticas de engajamento
+LegalTok é uma plataforma onde professores de direito podem compartilhar conhecimento jurídico através de vídeos curtos (máximo 90 segundos), criando uma comunidade educacional e profissional.
 
-### Para Alunos
-- ✅ Feed infinito de vídeos
-- ✅ Navegação por tópicos (Penal, Civil, Constitucional, etc.)
-- ✅ Sistema de seguir professores
-- ✅ Like, comentário e compartilhamento
-- ✅ Feed personalizado (home/following)
+### ✨ Funcionalidades Principais
 
-### Técnicas
-- ✅ Backend completo com Fastify + TypeScript
-- ✅ Banco PostgreSQL com Prisma ORM
-- ✅ Autenticação JWT (access + refresh)
-- ✅ WebSocket para atualizações em tempo real
-- ✅ Fila Redis + BullMQ para transcodificação
-- ✅ Frontend React + TypeScript + Tailwind
-- ✅ Upload de arquivos com validação
-- ✅ Rate limiting e CORS
+- **Feed Infinito**: Vídeos em formato vertical com scroll infinito
+- **Perfis de Professores**: Verificação de credenciais e áreas de especialização
+- **Sistema de Seguir**: Conecte-se com outros profissionais
+- **Upload de Vídeos**: Sistema de transcodificação automática (720p)
+- **Interações**: Likes, comentários e visualizações em tempo real
+- **Tópicos**: Categorização por áreas do direito
+- **Autenticação**: JWT com refresh tokens
 
 ## 🛠️ Stack Tecnológica
 
+### Frontend
+- **React 18** + **TypeScript**
+- **Vite** (build tool)
+- **Tailwind CSS** (styling)
+- **Zustand** (state management)
+- **TanStack Query** (data fetching)
+- **React Hook Form** + **Yup** (forms/validation)
+- **Framer Motion** (animations)
+
 ### Backend
-- **Runtime**: Node.js 20.x
-- **Framework**: Fastify
-- **Database**: PostgreSQL 16
-- **ORM**: Prisma
-- **Cache/Fila**: Redis + BullMQ
-- **Auth**: JWT + bcrypt
-- **Upload**: Multipart + ffmpeg
-- **WebSocket**: ws
-- **Validação**: Zod
+- **Node.js 20** + **TypeScript**
+- **Fastify** (web framework)
+- **Prisma** (ORM)
+- **PostgreSQL** (database)
+- **Redis** (cache/queue)
+- **BullMQ** (job queue)
+- **JWT** (authentication)
+- **FFmpeg** (video processing)
+- **WebSocket** (real-time)
+
+### Infraestrutura
+- **Docker** (containerization)
+- **Railway** (deployment)
+- **Neon** (PostgreSQL cloud)
+- **Upstash** (Redis cloud)
+
+## 📁 Estrutura do Projeto
+
+```
+legaltok-mvp/
+├── src/                    # Frontend React
+│   ├── components/         # Componentes React
+│   ├── hooks/             # Custom hooks
+│   ├── lib/               # Utilitários
+│   ├── services/          # APIs e serviços
+│   ├── store/             # Estado global
+│   └── types/             # Tipos TypeScript
+├── server/                # Backend Node.js
+│   ├── src/
+│   │   ├── lib/           # Clientes (DB, Redis)
+│   │   ├── middleware/    # Middlewares
+│   │   ├── routes/        # Rotas da API
+│   │   ├── services/      # Lógica de negócio
+│   │   ├── queues/        # Filas de processamento
+│   │   └── types/         # Tipos e schemas
+│   ├── prisma/            # Schema e migrações
+│   └── uploads/           # Arquivos de vídeo
+├── docs/                  # Documentação
+└── README_DEPLOY.md       # Guia de deploy
+```
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+- Node.js 20.x
+- Docker (opcional)
+- FFmpeg (para processamento de vídeo)
 
 ### Frontend
-- **Framework**: React 18 + TypeScript
-- **Build**: Vite
-- **Styling**: Tailwind CSS
-- **State**: Zustand
-- **Forms**: React Hook Form + Yup
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-
-### DevOps
-- **Containerização**: Docker + Docker Compose
-- **Database**: PostgreSQL + pgAdmin
-- **Cache**: Redis
-- **CI/CD**: GitHub Actions (configurado)
-
-## 📋 Pré-requisitos
-
-- Node.js 20.x ou superior
-- Docker e Docker Compose
-- FFmpeg instalado no sistema (para transcodificação)
-
-### Instalando FFmpeg
-
-**Windows:**
 ```bash
-# Via Chocolatey
-choco install ffmpeg
-
-# Ou baixe de https://ffmpeg.org/download.html
+cd legaltok-mvp
+npm install
+npm run dev
 ```
 
-**macOS:**
+### Backend
 ```bash
-brew install ffmpeg
+cd legaltok-mvp/server
+npm install
+npm run dev
 ```
 
-**Linux (Ubuntu/Debian):**
+### Banco de Dados
 ```bash
-sudo apt update
-sudo apt install ffmpeg
+cd legaltok-mvp/server
+npx prisma migrate dev
+npx prisma db seed
 ```
 
-## 🚀 Instalação e Configuração
+## 📚 Documentação
 
-### 1. Clone o repositório
+- [Arquitetura](./docs/ARCHITECTURE.md)
+- [API](./docs/API.md)
+- [Deploy](./README_DEPLOY.md)
+
+## 🔧 Configuração
+
+### Variáveis de Ambiente
+
+#### Frontend (.env)
 ```bash
-git clone https://github.com/iuripiraigbe-ops/sb1-swsnnssx.git
-cd sb1-swsnnssx
-```
-
-### 2. Configure as variáveis de ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
-```env
 VITE_API_URL=http://localhost:3001
 VITE_WS_URL=ws://localhost:3001/ws
 ```
 
-Crie um arquivo `.env` na pasta `server/`:
-
-**Para Desenvolvimento Local:**
-```env
+#### Backend (server/.env)
+```bash
 # Database
-DATABASE_URL="postgresql://legaltok:legaltok123@localhost:5432/legaltok?schema=public"
+DATABASE_URL="postgresql://user:pass@localhost:5432/legaltok"
 
 # Redis
 REDIS_URL="redis://localhost:6379"
 
 # JWT
-JWT_SECRET="dev-secret-key-change-in-production"
-JWT_REFRESH_SECRET="dev-refresh-secret-key-change-in-production"
-JWT_EXPIRES_IN="15m"
-JWT_REFRESH_EXPIRES_IN="7d"
+JWT_SECRET="your-secret-key"
+JWT_REFRESH_SECRET="your-refresh-secret"
 
 # Server
 PORT=3001
-NODE_ENV="development"
+NODE_ENV=development
 
-# File Upload
+# Upload
 UPLOAD_DIR="./uploads"
 MAX_FILE_SIZE=100000000
-
-# CORS
-CORS_ORIGIN="http://localhost:5173"
-
-# Rate Limiting
-RATE_LIMIT_MAX=100
-RATE_LIMIT_WINDOW_MS=900000
-```
-
-**Para Produção (Neon + Upstash):**
-Veja `MIGRATION_GUIDE.md` para configuração completa.
-
-### 3. Inicie os serviços de infraestrutura
-```bash
-docker-compose up -d
-```
-
-Isso irá iniciar:
-- PostgreSQL na porta 5432
-- Redis na porta 6379
-- pgAdmin na porta 8080 (admin@legaltok.com / admin123)
-
-### 4. Configure o banco de dados
-```bash
-cd server
-npm install
-npx prisma generate
-npx prisma db push
-npm run db:seed
-```
-
-### 5. Instale as dependências do frontend
-```bash
-cd ..
-npm install
-```
-
-### 6. Inicie os servidores
-
-**Terminal 1 - Backend:**
-```bash
-cd server
-npm run dev
-```
-
-**Terminal 2 - Frontend:**
-```bash
-npm run dev
-```
-
-## 🚀 Migração para Produção
-
-Para migrar para Neon (PostgreSQL) e Upstash (Redis):
-
-1. **Configure as variáveis de ambiente** conforme `MIGRATION_GUIDE.md`
-2. **Execute o teste de migração**:
-   ```bash
-   cd server
-   node test-migration.js
-   ```
-3. **Deploy no PaaS** (Render, Railway, etc.):
-   ```bash
-   npx prisma migrate deploy
-   npx prisma generate
-   npm start
-   ```
-
-Veja `MIGRATION_GUIDE.md` para instruções detalhadas.
-
-## 🎯 Como Usar
-
-### Acessando a aplicação
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:3001
-- **pgAdmin**: http://localhost:8080
-
-### Contas de teste
-Após rodar o seed, você pode usar estas contas:
-
-**Professores:**
-- Email: `ana.silva@legaltok.com` / Senha: `123456`
-- Email: `carlos.santos@legaltok.com` / Senha: `123456`
-- Email: `maria.costa@legaltok.com` / Senha: `123456`
-
-**Alunos:**
-- Email: `joao.aluno@email.com` / Senha: `123456`
-- Email: `maria.aluna@email.com` / Senha: `123456`
-
-### Fluxo de uso
-
-1. **Registro/Login**: Acesse a aplicação e faça login
-2. **Feed**: Navegue pelos vídeos no feed principal
-3. **Upload** (professores): Faça upload de vídeos educativos
-4. **Interação**: Like, comente e siga professores
-5. **Tópicos**: Explore vídeos por área do direito
-
-## 📁 Estrutura do Projeto
-
-```
-sb1-swsnnssx/
-├── src/                    # Frontend React
-│   ├── components/         # Componentes React
-│   ├── hooks/             # Custom hooks
-│   ├── lib/               # Utilitários (API client)
-│   ├── services/          # Serviços mockados (legacy)
-│   ├── store/             # Estado global (Zustand)
-│   └── types/             # Tipos TypeScript
-├── server/                # Backend Fastify
-│   ├── src/
-│   │   ├── routes/        # Rotas da API
-│   │   ├── services/      # Serviços (Redis, WebSocket, etc.)
-│   │   ├── middleware/    # Middlewares (auth, etc.)
-│   │   ├── types/         # Tipos e schemas Zod
-│   │   └── queues/        # Filas de processamento
-│   ├── prisma/            # Schema e migrations
-│   └── uploads/           # Arquivos de vídeo
-├── docker-compose.yml     # Serviços de infraestrutura
-└── README.md             # Este arquivo
-```
-
-## 🔧 Scripts Disponíveis
-
-### Frontend
-```bash
-npm run dev          # Desenvolvimento
-npm run build        # Build de produção
-npm run preview      # Preview da build
-npm run lint         # Linting
-```
-
-### Backend
-```bash
-cd server
-npm run dev          # Desenvolvimento
-npm run build        # Build
-npm run start        # Produção
-npm run db:seed      # Popular banco
-npm run db:studio    # Prisma Studio
-npm run test         # Testes
 ```
 
 ## 🧪 Testes
 
-### Backend
 ```bash
+# Frontend
+npm run test
+
+# Backend
 cd server
-npm test             # Testes unitários
-npm run test:e2e     # Testes end-to-end
+npm run test
 ```
 
-### Frontend
-```bash
-npm test             # Testes (configurar primeiro)
-```
+## 📦 Deploy
 
-## 📊 API Endpoints
+Veja o guia completo de deploy no [README_DEPLOY.md](./README_DEPLOY.md).
 
-### Autenticação
-- `POST /auth/register` - Registro
-- `POST /auth/login` - Login
-- `POST /auth/refresh` - Refresh token
-- `GET /me` - Perfil do usuário
-
-### Vídeos
-- `GET /videos/feed` - Feed de vídeos
-- `POST /videos` - Upload de vídeo
-- `GET /videos/:id` - Detalhes do vídeo
-- `POST /videos/:id/like` - Like/Unlike
-- `GET /videos/:id/comments` - Comentários
-- `POST /videos/:id/comments` - Adicionar comentário
-
-### Usuários
-- `GET /users/:id` - Perfil do usuário
-- `POST /users/follow/:id` - Seguir usuário
-- `DELETE /users/follow/:id` - Deixar de seguir
-
-### Tópicos
-- `GET /topics` - Lista de tópicos
-- `GET /topics/:slug` - Detalhes do tópico
-- `GET /topics/:slug/videos` - Vídeos do tópico
-
-## 🔒 Segurança
-
-- Autenticação JWT com refresh tokens
-- Senhas hasheadas com bcrypt
-- Rate limiting por IP
-- Validação de entrada com Zod
-- CORS configurado
-- Upload de arquivos validado
-
-## 🚀 Deploy
-
-### Produção
-1. Configure variáveis de ambiente de produção
-2. Use um serviço de transcodificação (Mux, Cloudflare Stream)
-3. Configure CDN para vídeos
-4. Use Redis Cloud ou similar
-5. Configure PostgreSQL em produção
-
-### Docker
-```bash
-# Build das imagens
-docker-compose -f docker-compose.prod.yml build
-
-# Deploy
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-## 🤝 Contribuindo
+## 🤝 Contribuição
 
 1. Fork o projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
@@ -338,30 +157,16 @@ docker-compose -f docker-compose.prod.yml up -d
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📝 Licença
+## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 🆘 Suporte
+## 👥 Autores
 
-Se você encontrar algum problema ou tiver dúvidas:
+- **Savant Armorer** - *Desenvolvimento inicial* - [savantarmorer](https://github.com/savantarmorer)
 
-1. Verifique se todos os pré-requisitos estão instalados
-2. Confirme se os serviços Docker estão rodando
-3. Verifique os logs do servidor
-4. Abra uma issue no GitHub
+## 🙏 Agradecimentos
 
-## 🎯 Próximos Passos
-
-- [ ] Integração com Mux/Cloudflare Stream
-- [ ] Notificações push
-- [ ] Moderação de conteúdo
-- [ ] Analytics avançados
-- [ ] App mobile (React Native)
-- [ ] Pagamentos e assinaturas
-- [ ] Live streaming
-- [ ] Gamificação
-
----
-
-**LegalTok** - Transformando a educação jurídica através de vídeos curtos e dinâmicos! 📚⚖️
+- Inspirado no TikTok para criar uma plataforma educacional
+- Comunidade jurídica brasileira
+- StackBlitz para o ambiente de desenvolvimento inicial
