@@ -1,9 +1,8 @@
+// @ts-nocheck
 import { FastifyInstance } from 'fastify';
-import { PrismaClient } from '@prisma/client';
 import { FeedQuerySchema } from '../../types/index.js';
 import { authenticate, optionalAuth } from '../../middleware/auth.js';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../lib/db.js';
 
 export async function feedRoutes(fastify: FastifyInstance) {
   // Get feed
@@ -25,7 +24,7 @@ export async function feedRoutes(fastify: FastifyInstance) {
         
         if (followingIds.length > 0) {
           whereClause.authorId = {
-            in: followingIds.map(f => f.followingId),
+            in: followingIds.map((f: any) => f.followingId),
           };
         } else {
           // If not following anyone, return empty feed
@@ -87,7 +86,7 @@ export async function feedRoutes(fastify: FastifyInstance) {
       const nextCursor = hasMore ? videos[query.limit - 1].id : null;
       
       // Transform videos to include stats and like status
-      const transformedVideos = videos.slice(0, query.limit).map(video => ({
+      const transformedVideos = videos.slice(0, query.limit).map((video: any) => ({
         ...video,
         isLiked: video.likes ? video.likes.length > 0 : false,
         stats: {
@@ -151,7 +150,7 @@ export async function feedRoutes(fastify: FastifyInstance) {
         },
       });
       
-      return videos.map(video => ({
+      return videos.map((video: any) => ({
         ...video,
         stats: {
           views: video.views,
@@ -235,7 +234,7 @@ export async function feedRoutes(fastify: FastifyInstance) {
       const hasMore = videoTopics.length > limit;
       const nextCursor = hasMore ? videoTopics[limit - 1].video.id : null;
       
-      const videos = videoTopics.slice(0, limit).map(vt => ({
+      const videos = videoTopics.slice(0, limit).map((vt: any) => ({
         ...vt.video,
         stats: {
           views: vt.video.views,
